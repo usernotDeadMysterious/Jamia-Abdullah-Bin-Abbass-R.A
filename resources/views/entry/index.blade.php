@@ -1,104 +1,118 @@
-<!DOCTYPE html>
-<html lang="ur" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>ماہانہ رجسٹر رپورٹ</title>
+<x-app-layout>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-</head>
+    <h2 class="text-center mb-4">ماہانہ رجسٹر رپورٹ</h2>
 
-<body class="container mt-4">
+    @php
+        $months = [
+            1 => 'جنوری',
+            2 => 'فروری',
+            3 => 'مارچ',
+            4 => 'اپریل',
+            5 => 'مئی',
+            6 => 'جون',
+            7 => 'جولائی',
+            8 => 'اگست',
+            9 => 'ستمبر',
+            10 => 'اکتوبر',
+            11 => 'نومبر',
+            12 => 'دسمبر'
+        ];
+    @endphp
 
-<h2 class="text-center mb-4">ماہانہ رجسٹر رپورٹ</h2>
+    <!-- 🔥 FILTER FORM -->
+    <div class="card p-3 mb-4">
+        <form method="GET" action="/entry" class="row">
 
-@php
-    $months = [
-        1 => 'جنوری',
-        2 => 'فروری',
-        3 => 'مارچ',
-        4 => 'اپریل',
-        5 => 'مئی',
-        6 => 'جون',
-        7 => 'جولائی',
-        8 => 'اگست',
-        9 => 'ستمبر',
-        10 => 'اکتوبر',
-        11 => 'نومبر',
-        12 => 'دسمبر'
-    ];
-@endphp
+            <div class="col-md-4">
+                <label>مہینہ</label>
+                <select name="month" class="form-control">
+                    <option value="">منتخب کریں</option>
 
-<!-- 🔥 FILTER FORM -->
-<form method="GET" action="/entry" class="row mb-4">
-    
-    <div class="col-md-4">
-        <label>مہینہ</label>
-        <select name="month" class="form-control">
-            <option value="">منتخب کریں</option>
+                    @foreach($months as $num => $name)
+                        <option value="{{ $num }}" {{ ($month == $num) ? 'selected' : '' }}>
+                            {{ $name }} ({{ $num }})
+                        </option>
+                    @endforeach
 
-            @foreach($months as $num => $name)
-                <option value="{{ $num }}" {{ ($month == $num) ? 'selected' : '' }}>
-                    {{ $name }} ({{ $num }})
-                </option>
-            @endforeach
+                </select>
+            </div>
 
-        </select>
+            <div class="col-md-4">
+                <label>سال</label>
+                <input type="number" name="year" value="{{ $year ?? '' }}" class="form-control">
+            </div>
+
+            <div class="col-md-4 mt-4">
+                <button class="btn btn-primary w-100">فلٹر کریں</button>
+            </div>
+
+        </form>
     </div>
 
-    <div class="col-md-4">
-        <label>سال</label>
-        <input type="number" name="year" value="{{ $year ?? '' }}" class="form-control">
+    <!-- 🔥 SELECTED MONTH -->
+    @if($month && $year)
+        <h5 class="text-center mb-3">
+            ماہ: {{ $months[$month] ?? '' }} ({{ $month }}) - {{ $year }}
+        </h5>
+    @endif
+
+    <!-- 🔥 TABLE -->
+    <div class="card p-3">
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>تاریخ</th>
+                        <th>نام معاونین</th>
+                        <th>رسید نمبر</th>
+                        <th>قسم</th>
+                        <th>رقم</th>
+                        <th>تفصیل</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @forelse($entries as $entry)
+                        <tr>
+                            <td>{{ $entry->date }}</td>
+                            <td>{{ $entry->name }}</td>
+                            <td>{{ $entry->receipt_no }}</td>
+                            <td>{{ $entry->type }}</td>
+                            <td>{{ $entry->amount }}</td>
+                            <td>{{ $entry->description }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6">کوئی ریکارڈ موجود نہیں</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <div class="col-md-4 mt-4">
-        <button class="btn btn-primary w-100">فلٹر کریں</button>
+    <!-- 🔥 SUMMARY -->
+    <div class="row mt-4 text-center">
+        <div class="col-md-4">
+            <div class="card bg-success text-white p-3">
+                <h5>مجموع آمدن</h5>
+                <h4>{{ $totalIncome }}</h4>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card bg-danger text-white p-3">
+                <h5>مجموع اخراجات</h5>
+                <h4>{{ $totalExpense }}</h4>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card bg-dark text-white p-3">
+                <h5>بقیہ رقم</h5>
+                <h4>{{ $totalIncome - $totalExpense }}</h4>
+            </div>
+        </div>
     </div>
 
-</form>
-
-<!-- 🔥 SELECTED MONTH HEADING -->
-@if($month && $year)
-    <h4 class="text-center mb-3">
-        ماہ: {{ $months[$month] ?? '' }} ({{ $month }}) - {{ $year }}
-    </h4>
-@endif
-
-<!-- 🔥 TABLE -->
-<table class="table table-bordered text-center">
-    <thead>
-        <tr>
-            <th>تاریخ</th>
-            <th>نام معاونین</th>
-            <th>رسید نمبر</th>
-            <th>قسم</th>
-            <th>رقم</th>
-            <th>تفصیل</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @forelse($entries as $entry)
-        <tr>
-            <td>{{ $entry->date }}</td>
-            <td>{{ $entry->name }}</td>
-            <td>{{ $entry->receipt_no }}</td>
-            <td>{{ $entry->type }}</td>
-            <td>{{ $entry->amount }}</td>
-            <td>{{ $entry->description }}</td>
-        </tr>
-        @empty
-        <tr>
-            <td colspan="6">کوئی ریکارڈ موجود نہیں</td>
-        </tr>
-        @endforelse
-    </tbody>
-</table>
-
-<hr>
-
-<h4>مجموع آمدن: {{ $totalIncome }}</h4>
-<h4>مجموع اخراجات: {{ $totalExpense }}</h4>
-<h4>بقیہ رقم: {{ $totalIncome - $totalExpense }}</h4>
-
-</body>
-</html>
+</x-app-layout>

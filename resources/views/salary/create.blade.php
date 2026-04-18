@@ -1,51 +1,66 @@
-<!DOCTYPE html>
-<html lang="ur" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>رجسٹر ادائیگی تنخواہ</title>
+<x-app-layout>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-</head>
+    <h2 class="text-center mb-4">رجسٹر ادائیگی تنخواہ</h2>
 
-<body class="container mt-4">
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-<h2 class="text-center mb-4">رجسٹر ادائیگی تنخواہ</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
 
-@if(session('success'))
-<div class="alert alert-success">{{ session('success') }}</div>
-@endif
+            <form method="POST" action="/salary/store">
+                @csrf
 
-<form method="POST" action="/salary/store">
+                <div class="mb-3">
+                    <label>نام</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
 
-    @csrf  <!-- 🔥 VERY IMPORTANT -->
+                <div class="mb-3">
+                    <label>عہدہ</label>
+                    <input type="text" name="designation" class="form-control">
+                </div>
 
-    <label>نام</label>
-    <input type="text" name="name" class="form-control" required>
+                <div class="mb-3">
+                    <label>دن</label>
+                    <input type="number" name="days" class="form-control">
+                </div>
 
-    <label>عہدہ</label>
-    <input type="text" name="designation" class="form-control">
+                <div class="mb-3">
+                    <label>شرح</label>
+                    <input type="number" name="rate" class="form-control">
+                </div>
 
-    <label>دن</label>
-    <input type="number" name="days" class="form-control">
+                <div class="mb-3">
+                    <label>الاونس</label>
+                    <input type="number" name="allowance" class="form-control" value="0">
+                </div>
 
-    <label>شرح</label>
-    <input type="number" name="rate" class="form-control">
+                <div class="mb-3">
+                    <label>پیشگی</label>
+                    <input type="number" name="advance" class="form-control" value="0">
+                </div>
 
-    <label>الاونس</label>
-    <input type="number" name="allowance" class="form-control" value="0">
+                <div class="mb-3">
+                    <label>مہینہ</label>
+                    <input type="number" name="month" class="form-control" required>
+                </div>
 
-    <label>پیشگی</label>
-    <input type="number" name="advance" class="form-control" value="0">
+                <div class="mb-3">
+                    <label>سال</label>
+                    <input type="number" name="year" class="form-control" required>
+                </div>
 
-    <label>مہینہ</label>
-    <input type="number" name="month" class="form-control" required>
+                <button type="submit" class="btn btn-success w-100">
+                    محفوظ کریں
+                </button>
 
-    <label>سال</label>
-    <input type="number" name="year" class="form-control" required>
+            </form>
 
-    <button class="btn btn-success mt-3 w-100">محفوظ کریں</button>
+        </div>
+    </div>
 
-</form>
-
-</body>
-</html>
+</x-app-layout>

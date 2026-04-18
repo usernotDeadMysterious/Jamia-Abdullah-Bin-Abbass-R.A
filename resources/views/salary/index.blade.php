@@ -1,106 +1,92 @@
-<!DOCTYPE html>
-<html lang="ur" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>رجسٹر ادائیگی تنخواہ</title>
+<x-app-layout>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <h2 class="text-center mb-4">صدقہ / زکوٰۃ رپورٹ</h2>
 
-    <style>
-        /* 🔥 REMOVE NUMBER INPUT ARROWS (ALL BROWSERS) */
-        input[type=number] {
-            appearance: textfield;
-            -webkit-appearance: none;
-            -moz-appearance: textfield;
-        }
+    @php
+        $months = [
+            1 => 'جنوری',
+            2 => 'فروری',
+            3 => 'مارچ',
+            4 => 'اپریل',
+            5 => 'مئی',
+            6 => 'جون',
+            7 => 'جولائی',
+            8 => 'اگست',
+            9 => 'ستمبر',
+            10 => 'اکتوبر',
+            11 => 'نومبر',
+            12 => 'دسمبر'
+        ];
+    @endphp
 
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            display: none;
-            -webkit-appearance: none;
-            margin: 0;
-        }
+    <!-- 🔥 FILTER -->
+    <div class="card p-3 mb-4">
+        <form method="GET" action="/sadqa" class="row">
 
-        /* 🔥 REMOVE SELECT DROPDOWN ICON */
-        select.form-control {
-            appearance: none !important;
-            -webkit-appearance: none !important;
-            -moz-appearance: none !important;
-            background-image: none !important;
-        }
+            <div class="col-md-4">
+                <label>مہینہ</label>
+                <select name="month" class="form-control">
+                    <option value="">منتخب کریں</option>
 
-        /* Optional: clean input look */
-        input, select {
-            border-radius: 6px;
-        }
-    </style>
-</head>
+                    @foreach($months as $num => $name)
+                        <option value="{{ $num }}" {{ ($month == $num) ? 'selected' : '' }}>
+                            {{ $name }} ({{ $num }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-<body class="container mt-4">
+            <div class="col-md-4">
+                <label>سال</label>
+                <input type="number" name="year" value="{{ $year ?? '' }}" class="form-control">
+            </div>
 
-<h2 class="text-center mb-4">رجسٹر ادائیگی تنخواہ</h2>
+            <div class="col-md-4 mt-4">
+                <button class="btn btn-primary w-100">فلٹر کریں</button>
+            </div>
 
-@if(session('success'))
-<div class="alert alert-success">{{ session('success') }}</div>
-@endif
-
-@php
-    $months = [
-        1 => 'جنوری',
-        2 => 'فروری',
-        3 => 'مارچ',
-        4 => 'اپریل',
-        5 => 'مئی',
-        6 => 'جون',
-        7 => 'جولائی',
-        8 => 'اگست',
-        9 => 'ستمبر',
-        10 => 'اکتوبر',
-        11 => 'نومبر',
-        12 => 'دسمبر'
-    ];
-@endphp
-
-<form method="POST" action="/salary/store">
-@csrf
-
-<div class="row mb-3">
-    <div class="col-md-6">
-        <label>بابت ماہ</label>
-        <select name="month" class="form-control" required>
-            @foreach($months as $num => $name)
-                <option value="{{ $num }}">{{ $name }} ({{ $num }})</option>
-            @endforeach
-        </select>
+        </form>
     </div>
 
-    <div class="col-md-6">
-        <label>سنہ</label>
-        <input type="number" name="year" class="form-control" placeholder="2026" required>
+    <!-- 🔥 TABLE -->
+    <div class="card p-3">
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>تاریخ</th>
+                        <th>قسم</th>
+                        <th>رقم</th>
+                        <th>دینے والا</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @forelse($sadqat as $item)
+                        <tr>
+                            <td>{{ $item->date }}</td>
+                            <td>{{ $item->type }}</td>
+                            <td>{{ $item->amount }}</td>
+                            <td>{{ $item->donor }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4">کوئی ریکارڈ موجود نہیں</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
-<label>نام</label>
-<input type="text" name="name" class="form-control" required>
+    <!-- 🔥 TOTAL -->
+    <div class="row mt-4 text-center">
+        <div class="col-md-4">
+            <div class="card bg-success text-white p-3">
+                <h5>کل صدقات</h5>
+                <h4>{{ $totalSadqa }}</h4>
+            </div>
+        </div>
+    </div>
 
-<label>عہدہ</label>
-<input type="text" name="designation" class="form-control">
-
-<label>تعداد دن</label>
-<input type="number" name="days" class="form-control">
-
-<label>شرح</label>
-<input type="number" name="rate" class="form-control">
-
-<label>الاونس</label>
-<input type="number" name="allowance" class="form-control" value="0">
-
-<label>پیشگی</label>
-<input type="number" name="advance" class="form-control" value="0">
-
-<button class="btn btn-success mt-3 w-100">محفوظ کریں</button>
-
-</form>
-
-</body>
-</html>
+</x-app-layout>
