@@ -118,14 +118,24 @@
     <!-- 🔥 SIDEBAR -->
     <div id="sidebar" class="sidebar">
 
-        <h4>مدرسہ سسٹم</h4>
+        <span class="text-sm">منتظم</span>
 
         <a href="{{ url('/dashboard') }}">ڈیش بورڈ</a>
-        <a href="{{ url('/entry') }}">رجسٹر رپورٹ</a>
-        <a href="{{ url('/entry/create') }}">نیا اندراج</a>
-
-        <a href="{{ url('/expense') }}">خرچ رپورٹ</a>
+        <span>Budget</span>
+        <a href="{{ url('/entry/create') }}">نیا وصول</a>
         <a href="{{ url('/expense/create') }}">نیا خرچ</a>
+        <a href="{{ url('/expense') }}">تفصیل اخراجات</a>
+        <a href="{{ url('/entry') }}">تفصیل آمد</a>
+        <span class="text-sm">طلباء کا نظام</span>
+
+        <a href="{{ route('students.index') }}">
+            📋 تفصیل طلباء
+        </a>
+
+        <a href="{{ route('students.create') }}">
+            ➕ نیا طالب علم
+        </a>
+
         <a href="{{ url('/sadqa/create') }}">صدقہ درج کریں</a>
         <a href="{{ url('/salary') }}">تنخواہ رپورٹ</a>
         <a href="{{ url('/salary/create') }}">تنخواہ درج کریں</a>
@@ -146,7 +156,7 @@
 
             <!-- 🏫 Text Info -->
             <div class="text-start">
-                <h4 class="mb-1 fw-bold">جامعہ عبد اللہ بن عباسؓ</h4>
+                <h2 class="mb-1 font-bold text-2xl">جامعہ عبد اللہ بن عباسؓ</h2>
                 <p class="mb-0 text-muted">یونیورسٹی روڈ، تھکل پایان، پشاور</p>
                 <small class="text-secondary">0321-9116027</small>
             </div>
@@ -167,7 +177,16 @@
         @endisset
 
 
+        @if (session('success'))
+            <div class="mb-4 flex items-center justify-between bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg shadow-sm"
+                dir="rtl">
+                <span>{{ session('success') }}</span>
 
+                <button onclick="this.parentElement.remove()" class="text-green-700 font-bold">
+                    ✕
+                </button>
+            </div>
+        @endif
         {{ $slot }}
 
     </div>

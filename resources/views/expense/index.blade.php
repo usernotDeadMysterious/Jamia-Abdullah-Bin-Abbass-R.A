@@ -2,10 +2,15 @@
 
     <h2 class="text-center mb-4">خرچ رپورٹ</h2>
 
+
     {{-- ✅ Filters --}}
     <form method="GET" class="row mb-4 justify-content-center">
+        <div class="col-md-2 bg-none">
+            <a href="/expense/create" class="btn btn-secondary w-100">+ نئے اخراجات</a>
+        </div>
 
         <div class="col-md-3">
+
             <select name="month" class="form-control">
                 <option value="">مہینہ منتخب کریں</option>
                 @for($i = 1; $i <= 12; $i++)
@@ -30,6 +35,7 @@
         <div class="col-md-2">
             <button class="btn btn-primary w-100">فلٹر کریں</button>
         </div>
+
 
     </form>
 

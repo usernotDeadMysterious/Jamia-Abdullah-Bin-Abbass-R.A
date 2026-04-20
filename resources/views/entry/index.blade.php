@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <h2 class="text-center mb-4">ماہانہ رجسٹر رپورٹ</h2>
+
 
     @php
         $months = [
@@ -21,8 +21,11 @@
 
     <!-- 🔥 FILTER FORM -->
     <div class="card p-3 mb-4">
+        <h2 class="text-start    font-bold text-xl p-2 mb-4 "> موصول ریکارڈ</h2>
         <form method="GET" action="/entry" class="row">
-
+            <div class="col-md-2 bg-none mt-4">
+                <a href="/entry/create" class="btn btn-secondary w-100">+ نئے موصول</a>
+            </div>
             <div class="col-md-4">
                 <label>مہینہ</label>
                 <select name="month" class="form-control">
@@ -42,7 +45,7 @@
                 <input type="number" name="year" value="{{ $year ?? '' }}" class="form-control">
             </div>
 
-            <div class="col-md-4 mt-4">
+            <div class="col-md-2 mt-4">
                 <button class="btn btn-primary w-100">فلٹر کریں</button>
             </div>
 
