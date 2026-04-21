@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Entry extends Model
 {
-    //
+    protected $fillable = [
+        'date',
+        'name',
+        'receipt_no',
+        'amount',
+        'type',
+        'description'
+    ];
 }

@@ -32,24 +32,52 @@ class EntryController extends Controller
     {
         $month = $request->month;
         $year = $request->year;
+        $search = $request->search;
 
         $query = Entry::query();
 
+        // 📅 Month + Year filter
         if ($month && $year) {
             $query->whereMonth('date', $month)
-                  ->whereYear('date', $year);
+                ->whereYear('date', $year);
         }
 
-        $entries = $query->orderBy('date', 'desc')->get();
+        // 🔍 Search (POWERFUL)
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                    ->orWhere('receipt_no', 'like', "%$search%")
+                    ->orWhere('type', 'like', "%$search%");
+            });
+        }
 
-        $totalIncome = $query->whereIn('type', ['صدقہ', 'زکوٰۃ'])->sum('amount');
-        $totalExpense = Entry::where('type', 'خرچ')
-            ->when($month && $year, function ($q) use ($month, $year) {
-                $q->whereMonth('date', $month)
-                  ->whereYear('date', $year);
-            })
+        // 📄 Pagination
+        $entries = $query->orderBy('date', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        // 💰 Totals (separate queries = correct data)
+        $totalIncome = Entry::when($month && $year, function ($q) use ($month, $year) {
+            $q->whereMonth('date', $month)
+                ->whereYear('date', $year);
+        })
+            ->whereIn('type', ['صدقہ', 'زکوٰۃ'])
             ->sum('amount');
 
-        return view('entry.index', compact('entries', 'totalIncome', 'totalExpense', 'month', 'year'));
+        $totalExpense = Entry::when($month && $year, function ($q) use ($month, $year) {
+            $q->whereMonth('date', $month)
+                ->whereYear('date', $year);
+        })
+            ->where('type', 'خرچ')
+            ->sum('amount');
+
+        return view('entry.index', compact(
+            'entries',
+            'totalIncome',
+            'totalExpense',
+            'month',
+            'year',
+            'search'
+        ));
     }
 }

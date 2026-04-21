@@ -3,76 +3,121 @@
     <div class="max-w-6xl mx-auto" dir="rtl">
 
         <h2 class="text-xl font-bold mb-4">اساتذہ کی فہرست</h2>
+        {{-- Search and Filters --}}
+        <form method="GET" class="row g-2 mb-4 align-items-end">
 
-        <a href="{{ route('teachers.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
-            نیا استاد
-        </a>
+            {{-- ➕ Add --}}
+            <div class="col-md-2">
+                <a href="{{ route('teachers.create') }}"
+                    class="bg-green-600 text-white px-3 py-2 rounded w-100 text-center d-block">
+                    + نیا استاد
+                </a>
+            </div>
 
-        <table class="w-full mt-4 border">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th>نام</th>
-                    <th>CNIC</th>
-                    <th>رابطہ</th>
-                    <th>مضامین</th>
-                    <th>تنخواہ</th>
-                    <th>اسٹیٹس</th>
-                    <th>کارروائیاں</th>
-                </tr>
-            </thead>
+            {{-- 🔍 Search --}}
+            <div class="col-md-4">
+                <input type="text" name="search" value="{{ request('search') }}" class="form-control"
+                    placeholder="نام / CNIC / رابطہ / مضمون">
+            </div>
 
-            <tbody>
-                @foreach($teachers as $teacher)
-                    <tr class="border-t">
+            {{-- 📊 Status --}}
+            <div class="col-md-3">
+                <select name="status" class="form-control">
+                    <option value="">اسٹیٹس</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                </select>
+            </div>
 
-                        <td>{{ $teacher->full_name }}</td>
-                        <td>{{ $teacher->cnic }}</td>
-                        <td>{{ $teacher->contact }}</td>
-                        <td>{{ $teacher->subjects }}</td>
-                        <td>{{ $teacher->salary }}</td>
+            {{-- Buttons --}}
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-primary w-100">فلٹر</button>
+                <a href="{{ route('teachers.index') }}" class="btn btn-outline-secondary w-100">
+                    ری سیٹ
+                </a>
+            </div>
 
-                        <td>
-                            <span class="px-2 py-1 text-xs rounded text-white
-                                    {{ $teacher->status == 'active' ? 'bg-green-500' : 'bg-gray-500' }}">
-                                {{ $teacher->status }}
-                            </span>
-                        </td>
+        </form>
+        {{-- Table and record s --}}
+        <div class="card shadow-sm border-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle text-center mb-0">
 
-                        <td>
-                            <div class="flex items-center gap-2">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>نام</th>
+                            <th>CNIC</th>
+                            <th>رابطہ</th>
+                            <th>مضامین</th>
+                            <th>تنخواہ</th>
+                            <th>اسٹیٹس</th>
+                            <th>کارروائیاں</th>
+                        </tr>
+                    </thead>
 
-                                <!-- View (optional for now) -->
-                                <a href="{{ route('teachers.show', $teacher->id) }}"
-                                    class="bg-blue-600 text-white px-3 py-1 text-sm rounded">
-                                    دیکھیں
-                                </a>
+                    <tbody>
+                        @forelse($teachers as $teacher)
+                            <tr>
 
-                                <!-- Edit -->
-                                <a href="{{ route('teachers.edit', $teacher->id) }}"
-                                    class="bg-yellow-500 text-white px-3 py-1 text-sm rounded">
-                                    ترمیم
-                                </a>
+                                <td>{{ $teachers->firstItem() + $loop->index }}</td>
 
-                                <!-- Delete -->
-                                <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST"
-                                    onsubmit="return confirm('کیا آپ واقعی حذف کرنا چاہتے ہیں؟')">
+                                <td class="fw-bold">{{ $teacher->full_name }}</td>
+                                <td>{{ $teacher->cnic }}</td>
+                                <td>{{ $teacher->contact }}</td>
 
-                                    @csrf
-                                    @method('DELETE')
+                                <td>
+                                    <span class="badge bg-info text-dark">
+                                        {{ $teacher->subjects }}
+                                    </span>
+                                </td>
 
-                                    <button class="bg-red-600 text-white px-3 py-1 text-sm rounded">
-                                        حذف
-                                    </button>
-                                </form>
+                                <td class="fw-bold text-success">
+                                    {{ number_format($teacher->salary) }}
+                                </td>
 
-                            </div>
-                        </td>
+                                <td>
+                                    <span class="badge {{ $teacher->status == 'active' ? 'bg-success' : 'bg-secondary' }}">
+                                        {{ $teacher->status }}
+                                    </span>
+                                </td>
 
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2 flex-wrap">
 
+                                        <a href="{{ route('teachers.show', $teacher->id) }}"
+                                            class="btn btn-sm btn-primary">دیکھیں</a>
+
+                                        <a href="{{ route('teachers.edit', $teacher->id) }}"
+                                            class="btn btn-sm btn-warning">ترمیم</a>
+
+                                        <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST"
+                                            onsubmit="return confirm('کیا آپ واقعی حذف کرنا چاہتے ہیں؟')">
+
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button class="btn btn-sm btn-danger">حذف</button>
+                                        </form>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8">کوئی ریکارڈ موجود نہیں</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        {{-- pagination --}}
+        <div class="mt-3 d-flex justify-content-center">
+            {{ $teachers->links() }}
+        </div>
     </div>
 
 </x-app-layout>

@@ -10,10 +10,38 @@ class TeacherController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teachers = \App\Models\Teacher::latest()->get();
-        return view('teachers.index', compact('teachers'));
+        $search = $request->search;
+        $status = $request->status;
+
+        $query = \App\Models\Teacher::query();
+
+        // 🔍 Search
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('full_name', 'like', "%$search%")
+                    ->orWhere('cnic', 'like', "%$search%")
+                    ->orWhere('contact', 'like', "%$search%")
+                    ->orWhere('subjects', 'like', "%$search%");
+            });
+        }
+
+        // 📊 Status Filter
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        // 📄 Pagination
+        $teachers = $query->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('teachers.index', compact(
+            'teachers',
+            'search',
+            'status'
+        ));
     }
 
     /**

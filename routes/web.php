@@ -39,9 +39,9 @@ Route::middleware('auth')->group(function () {
 
 
 
-    Route::get('/expense/create', [ExpenseController::class, 'create']);
-    Route::post('/expense/store', [ExpenseController::class, 'store']);
-    Route::get('/expense', [ExpenseController::class, 'index']);
+    Route::get('/expense/create', [ExpenseController::class, 'create'])->name('expense.create');
+    Route::post('/expense/store', [ExpenseController::class, 'store'])->name('expense.store');
+    Route::get('/expense', [ExpenseController::class, 'index'])->name('expense.index');
 
     Route::resource('students', StudentController::class);
 

@@ -10,15 +10,51 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::latest()->get();
-        return view('students.index', compact('students'));
+        $search = $request->search;
+        $class = $request->class_level;
+        $status = $request->status;
+
+        $query = Student::query();
+
+        // 🔍 Search
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('full_name', 'like', "%$search%")
+                    ->orWhere('father_name', 'like', "%$search%")
+                    ->orWhere('registration_no', 'like', "%$search%");
+            });
+        }
+
+        // 🎓 Class Filter
+        if ($class) {
+            $query->where('class_level', $class);
+        }
+
+        // 📊 Status Filter
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        // 📄 Pagination
+        $students = $query->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('students.index', compact(
+            'students',
+            'search',
+            'class',
+            'status'
+        ));
     }
 
     /**
      * Show the form for creating a new resource.
      */
+
+
     public function create()
     {
         //
@@ -30,10 +66,10 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Create student
+        // ✅ Create student
         $student = Student::create($request->all());
 
-        // 2. Student Image
+        // 📸 Student Image
         if ($request->hasFile('student_image')) {
             $path = $request->file('student_image')->store('students', 'public');
 
@@ -43,7 +79,7 @@ class StudentController extends Controller
             ]);
         }
 
-        // 3. CNIC Document
+        // 🪪 CNIC Document
         if ($request->hasFile('cnic_document')) {
             $path = $request->file('cnic_document')->store('students', 'public');
 
@@ -53,7 +89,7 @@ class StudentController extends Controller
             ]);
         }
 
-        // 4. Extra Documents
+        // 📁 Extra Documents
         if ($request->hasFile('extra_documents')) {
             foreach ($request->file('extra_documents') as $file) {
                 $path = $file->store('students', 'public');
@@ -64,39 +100,7 @@ class StudentController extends Controller
                 ]);
             }
         }
-        $student = Student::create($request->all());
 
-        // Student Image
-        if ($request->hasFile('student_image')) {
-            $path = $request->file('student_image')->store('students', 'public');
-
-            $student->documents()->create([
-                'type' => 'image',
-                'file_path' => $path
-            ]);
-        }
-
-        // CNIC
-        if ($request->hasFile('cnic_document')) {
-            $path = $request->file('cnic_document')->store('students', 'public');
-
-            $student->documents()->create([
-                'type' => 'cnic',
-                'file_path' => $path
-            ]);
-        }
-
-        // Extra
-        if ($request->hasFile('extra_documents')) {
-            foreach ($request->file('extra_documents') as $file) {
-                $path = $file->store('students', 'public');
-
-                $student->documents()->create([
-                    'type' => 'other',
-                    'file_path' => $path
-                ]);
-            }
-        }
         return redirect()->route('students.index')
             ->with('success', 'طالب علم کامیابی سے شامل ہو گیا');
     }

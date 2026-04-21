@@ -35,18 +35,38 @@ class ExpenseController extends Controller
     {
         $month = $request->month;
         $year = $request->year;
+        $search = $request->search;
 
         $query = Expense::query();
 
+        // 📅 Month + Year filter
         if ($month && $year) {
             $query->whereMonth('date', $month)
                 ->whereYear('date', $year);
         }
 
-        $expenses = $query->orderBy('date', 'desc')->get();
+        // 🔍 Search filter (POWERFUL)
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%$search%")
+                    ->orWhere('given_to', 'like', "%$search%")
+                    ->orWhere('category', 'like', "%$search%");
+            });
+        }
+
+        // 📊 Pagination (10 per page)
+        $expenses = $query->orderBy('date', 'desc')
+            ->paginate(10)
+            ->withQueryString(); // keep filters in pagination
 
         $totalExpense = $query->sum('amount');
 
-        return view('expense.index', compact('expenses', 'totalExpense', 'month', 'year'));
+        return view('expense.index', compact(
+            'expenses',
+            'totalExpense',
+            'month',
+            'year',
+            'search'
+        ));
     }
 }
