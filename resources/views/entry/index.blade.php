@@ -64,9 +64,9 @@
     </div>
 
     <!-- 🔥 SELECTED MONTH -->
-    @if($month && $year)
+    @if($month && $year && isset($months[(int) $month]))
         <h5 class="text-center mb-3">
-            ماہ: {{ $months[$month] ?? '' }} ({{ $month }}) - {{ $year }}
+            ماہ: {{ $months[(int) $month] }} ({{ $month }}) - {{ $year }}
         </h5>
     @endif
 
