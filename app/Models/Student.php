@@ -47,6 +47,7 @@ class Student extends Model
      */
     public function documents()
     {
-        return $this->hasMany(StudentDocument::class);
+        return $this->morphMany(Document::class, 'documentable');
     }
+
 }

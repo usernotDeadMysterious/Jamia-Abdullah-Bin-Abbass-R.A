@@ -64,7 +64,39 @@ class StudentController extends Controller
                 ]);
             }
         }
+        $student = Student::create($request->all());
 
+        // Student Image
+        if ($request->hasFile('student_image')) {
+            $path = $request->file('student_image')->store('students', 'public');
+
+            $student->documents()->create([
+                'type' => 'image',
+                'file_path' => $path
+            ]);
+        }
+
+        // CNIC
+        if ($request->hasFile('cnic_document')) {
+            $path = $request->file('cnic_document')->store('students', 'public');
+
+            $student->documents()->create([
+                'type' => 'cnic',
+                'file_path' => $path
+            ]);
+        }
+
+        // Extra
+        if ($request->hasFile('extra_documents')) {
+            foreach ($request->file('extra_documents') as $file) {
+                $path = $file->store('students', 'public');
+
+                $student->documents()->create([
+                    'type' => 'other',
+                    'file_path' => $path
+                ]);
+            }
+        }
         return redirect()->route('students.index')
             ->with('success', 'طالب علم کامیابی سے شامل ہو گیا');
     }

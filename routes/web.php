@@ -8,6 +8,7 @@ use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -37,12 +38,16 @@ Route::middleware('auth')->group(function () {
 
 
 
+
     Route::get('/expense/create', [ExpenseController::class, 'create']);
     Route::post('/expense/store', [ExpenseController::class, 'store']);
     Route::get('/expense', [ExpenseController::class, 'index']);
 
     Route::resource('students', StudentController::class);
 
+    Route::middleware(['auth'])->group(function () {
+        Route::resource('teachers', TeacherController::class);
+    });
 });
 
 require __DIR__ . '/auth.php';

@@ -35,12 +35,44 @@
             top: 0;
             right: 0;
             width: 250px;
-            height: 100%;
+            height: 100vh;
             background: #0f172a;
             color: white;
-            padding: 20px;
-            transition: 0.3s;
             z-index: 1000;
+
+            display: flex;
+            flex-direction: column;
+            /* 🔥 important */
+        }
+
+        /* Scrollable menu area */
+        .sidebar-menu {
+            flex: 1;
+            /* take remaining space */
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* Smooth scroll */
+        .sidebar-menu {
+            scroll-behavior: smooth;
+        }
+
+        /* Optional: nicer scrollbar */
+        .sidebar-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-menu::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+
+        /* Logout fixed at bottom */
+        .sidebar-footer {
+            padding: 15px;
+            border-top: 1px solid #1e293b;
+            background: #0f172a;
         }
 
         .sidebar.closed {
@@ -118,33 +150,40 @@
     <!-- 🔥 SIDEBAR -->
     <div id="sidebar" class="sidebar">
 
-        <span class="text-sm">منتظم</span>
+        <!-- 🔽 SCROLLABLE AREA -->
+        <div class="sidebar-menu">
 
-        <a href="{{ url('/dashboard') }}">ڈیش بورڈ</a>
-        <span>Budget</span>
-        <a href="{{ url('/entry/create') }}">نیا وصول</a>
-        <a href="{{ url('/expense/create') }}">نیا خرچ</a>
-        <a href="{{ url('/expense') }}">تفصیل اخراجات</a>
-        <a href="{{ url('/entry') }}">تفصیل آمد</a>
-        <span class="text-sm">طلباء کا نظام</span>
+            <span class="text-sm">منتظم</span>
 
-        <a href="{{ route('students.index') }}">
-            📋 تفصیل طلباء
-        </a>
+            <a href="{{ url('/dashboard') }}">ڈیش بورڈ</a>
 
-        <a href="{{ route('students.create') }}">
-            ➕ نیا طالب علم
-        </a>
+            <span>Budget</span>
+            <a href="{{ url('/entry/create') }}">نیا وصول</a>
+            <a href="{{ url('/expense/create') }}">نیا خرچ</a>
+            <a href="{{ url('/expense') }}">تفصیل اخراجات</a>
+            <a href="{{ url('/entry') }}">تفصیل آمد</a>
 
-        <a href="{{ url('/sadqa/create') }}">صدقہ درج کریں</a>
-        <a href="{{ url('/salary') }}">تنخواہ رپورٹ</a>
-        <a href="{{ url('/salary/create') }}">تنخواہ درج کریں</a>
+            <span class="text-sm">طلباء کا نظام</span>
+            <a href="{{ route('students.index') }}">📋 تفصیل طلباء</a>
+            <a href="{{ route('students.create') }}">➕ نیا طالب علم</a>
 
-        <!-- 🔥 Logout (Laravel Breeze) -->
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button class="logout-btn">لاگ آؤٹ</button>
-        </form>
+            <span class="text-sm">اساتذہ کا نظام</span>
+            <a href="{{ route('teachers.index') }}">📋 اساتذہ کی فہرست</a>
+            <a href="{{ route('teachers.create') }}">➕ نیا استاد</a>
+
+            <a href="{{ url('/sadqa/create') }}">صدقہ درج کریں</a>
+            <a href="{{ url('/salary') }}">تنخواہ رپورٹ</a>
+            <a href="{{ url('/salary/create') }}">تنخواہ درج کریں</a>
+
+        </div>
+
+        <!-- 🔽 FIXED FOOTER -->
+        <div class="sidebar-footer">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="logout-btn">لاگ آؤٹ</button>
+            </form>
+        </div>
 
     </div>
 
