@@ -4,12 +4,9 @@
 
         {{-- 🔝 HEADER --}}
         <div class="flex justify-between items-center">
-            <h2 class="text-xl font-bold">ڈیش بورڈ</h2>
+            <h2 class="text-xl font-bold text-white">ڈیش بورڈ</h2>
 
-            <div class="flex gap-2">
-                <a href="/entry/create" class="px-4 py-2 bg-green-600 text-white rounded-xl text-sm">+ آمدن</a>
-                <a href="/expense/create" class="px-4 py-2 bg-red-600 text-white rounded-xl text-sm">+ خرچ</a>
-            </div>
+           
         </div>
 
         {{-- 💰 INCOME --}}
