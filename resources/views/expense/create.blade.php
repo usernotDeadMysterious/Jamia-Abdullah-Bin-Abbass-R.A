@@ -2,12 +2,12 @@
 
 
 
-    {{-- ✅ Success Message --}}
+    {{-- ✅ Success Message
     @if(session('success'))
-        <div class="alert alert-success text-center">
-            {{ session('success') }}
-        </div>
-    @endif
+    <div class="alert alert-success text-center">
+        {{ session('success') }}
+    </div>
+    @endif --}}
 
     <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="card shadow-sm p-4" style="width: 100%; max-width: 700px; border-radius: 12px;">

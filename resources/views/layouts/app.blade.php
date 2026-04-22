@@ -149,34 +149,47 @@
 
     <!-- 🔥 SIDEBAR -->
     <div id="sidebar" class="sidebar">
-
-        <!-- 🔽 SCROLLABLE AREA -->
         <div class="sidebar-menu">
 
+            {{-- 🧭 Dashboard --}}
             <span class="text-sm">منتظم</span>
+            <a href="{{ url('/dashboard') }}"> ڈیش بورڈ</a>
 
-            <a href="{{ url('/dashboard') }}">ڈیش بورڈ</a>
+            {{-- ➕ FORMS / CREATE --}}
+            <span class="text-sm mt-3"> اندراج</span>
 
-            <span>Budget</span>
-            <a href="{{ url('/entry/create') }}">نیا وصول</a>
-            <a href="{{ url('/expense/create') }}">نیا خرچ</a>
-            <a href="{{ url('/expense') }}">تفصیل اخراجات</a>
-            <a href="{{ url('/entry') }}">تفصیل آمد</a>
+            <a href="{{ url('/entry/create') }}"> نیا وصول</a>
+            <a href="{{ url('/expense/create') }}"> نیا خرچ</a>
 
-            <span class="text-sm">طلباء کا نظام</span>
-            <a href="{{ route('students.index') }}">📋 تفصیل طلباء</a>
-            <a href="{{ route('students.create') }}">➕ نیا طالب علم</a>
+            <a href="{{ route('students.create') }}"> نیا طالب علم</a>
+            <a href="{{ route('teachers.create') }}"> نیا استاد</a>
 
-            <span class="text-sm">اساتذہ کا نظام</span>
-            <a href="{{ route('teachers.index') }}">📋 اساتذہ کی فہرست</a>
-            <a href="{{ route('teachers.create') }}">➕ نیا استاد</a>
+            {{-- 💰 Salary Entry --}}
+            <a href="{{ url('/expense/create?category=salary') }}">
+                تنخواہ ادا کریں
+            </a>
 
-            <a href="{{ url('/sadqa/create') }}">صدقہ درج کریں</a>
-            <a href="{{ url('/salary') }}">تنخواہ رپورٹ</a>
-            <a href="{{ url('/salary/create') }}">تنخواہ درج کریں</a>
+            {{-- 📊 RECORDS --}}
+            <span class="text-sm mt-3"> ریکارڈز</span>
+
+            <a href="{{ url('/entry') }}"> تفصیل آمد</a>
+            <a href="{{ url('/expense') }}"> تفصیل اخراجات</a>
+
+            <a href="{{ route('students.index') }}"> طلباء کی فہرست</a>
+            <a href="{{ route('teachers.index') }}"> اساتذہ کی فہرست</a>
+            <span class="text-sm mt-3"> رپورٹس</span>
+
+            <a href="{{ route('reports.income') }}"
+                class="{{ request()->routeIs('reports.income') ? 'bg-slate-700 text-white' : '' }}">
+                آمد رپورٹ
+            </a>
+
+            <a href="{{ route('reports.expense') }}"
+                class="{{ request()->routeIs('reports.expense') ? 'bg-slate-700 text-white' : '' }}">
+                خرچ رپورٹ
+            </a>
 
         </div>
-
         <!-- 🔽 FIXED FOOTER -->
         <div class="sidebar-footer">
             <form method="POST" action="{{ route('logout') }}">
@@ -184,6 +197,9 @@
                 <button class="logout-btn">لاگ آؤٹ</button>
             </form>
         </div>
+
+
+
 
     </div>
 

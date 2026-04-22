@@ -9,7 +9,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use Barryvdh\DomPDF\Facade\Pdf;
 
+use ArPHP\I18N\Arabic;
 Route::get('/', function () {
     return redirect('/dashboard');
 });
@@ -48,6 +50,62 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::resource('teachers', TeacherController::class);
     });
+
+    Route::get('/reports/income', [EntryController::class, 'report'])->name('reports.income');
+    Route::get('/reports/income/pdf', [EntryController::class, 'reportPdf'])
+        ->name('reports.income.pdf');
+
+    Route::get('/reports/expense', [ExpenseController::class, 'report']);
+    Route::get('/reports/expense/pdf', [ExpenseController::class, 'reportPdf'])
+        ->name('reports.expense.pdf');
+
+
+    Route::get('/reports/income/pdf-browser', [EntryController::class, 'reportPdfBrowser']);
+
+    Route::get('/reports/expense', [ExpenseController::class, 'report'])
+        ->name('reports.expense');
+
+    Route::get('/reports/expense/pdf-browser', [ExpenseController::class, 'reportPdfBrowser']);
+
+
+    // Route::get('/test-pdf', function () {
+
+
+    //     $pdf = Pdf::loadView('test-pdf')
+    //         ->setPaper('A4')
+    //         ->setOptions([
+    //             'defaultFont' => 'urdu',
+    //             'isHtml5ParserEnabled' => true,
+    //             'isRemoteEnabled' => true,
+    //             'chroot' => base_path(),
+    //         ]);
+
+    //     return $pdf->stream('test.pdf');
+    // });
+
+
+
+
+    Route::get('/test-pdf', function () {
+
+        $arabic = new Arabic();
+
+        $title = $arabic->utf8Glyphs('اردو ٹیسٹ');
+        $text = $arabic->utf8Glyphs('یہ ایک ٹیسٹ ہے کہ اردو صحیح دکھ رہی ہے یا نہیں۔');
+
+        $pdf = Pdf::loadView('test-pdf', [
+            'title' => $title,
+            'text' => $text,
+        ])->setOptions([
+                    'defaultFont' => 'urdu',
+                    'isRemoteEnabled' => true,
+                    'chroot' => public_path(),
+                ]);
+
+        return $pdf->stream();
+    });
 });
+
+
 
 require __DIR__ . '/auth.php';

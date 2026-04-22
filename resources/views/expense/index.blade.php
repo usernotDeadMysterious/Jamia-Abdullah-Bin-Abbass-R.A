@@ -1,6 +1,22 @@
 <x-app-layout>
 
-    <h2 class="text-center mb-4">تفصیل اخراجات</h2>
+    <div class="w-full flex flex-row justify-between gap-2 mb-3">
+
+        <h2 class="text-start font-bold text-xl p-2">تفصیل اخراجات</h2>
+
+        <div>
+            <a href="{{ url('/reports/expense/pdf-browser') . '?' . http_build_query(request()->all()) }}"
+                target="_blank" class="btn btn-success">
+                رپورٹ دیکھیں
+            </a>
+
+            <a href="{{ url('/reports/expense/pdf-browser') . '?' . http_build_query(array_merge(request()->all(), ['download' => 1])) }}"
+                target="_blank" class="btn btn-dark">
+                ڈاؤن لوڈ رپورٹ
+            </a>
+        </div>
+
+    </div>
 
 
     {{-- ✅ Filters --}}
@@ -12,42 +28,28 @@
             </a>
         </div>
 
-        {{-- 🔍 Search --}}
+        {{-- Search --}}
         <div class="col-md-3">
             <input type="text" name="search" value="{{ request('search') }}" class="form-control shadow-sm"
                 placeholder="تلاش کریں...">
         </div>
 
-        {{-- 📅 Month --}}
+        {{-- FROM --}}
         <div class="col-md-2">
-            <select name="month" class="form-control shadow-sm">
-                <option value="">مہینہ</option>
-                @for($i = 1; $i <= 12; $i++)
-                    <option value="{{ $i }}" {{ $month == $i ? 'selected' : '' }}>
-                        {{ $i }}
-                    </option>
-                @endfor
-            </select>
+            <input type="date" name="from" value="{{ request('from') }}" class="form-control shadow-sm">
         </div>
 
-        {{-- 📅 Year --}}
+        {{-- TO --}}
         <div class="col-md-2">
-            <select name="year" class="form-control shadow-sm">
-                <option value="">سال</option>
-                @for($y = date('Y'); $y >= 2020; $y--)
-                    <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>
-                        {{ $y }}
-                    </option>
-                @endfor
-            </select>
+            <input type="date" name="to" value="{{ request('to') }}" class="form-control shadow-sm">
         </div>
 
-        {{-- 🔘 Buttons --}}
-        <div class="col-md-3 d-flex gap-2">
+        <div class="col-md-2">
             <button class="btn btn-primary w-100 shadow-sm">فلٹر</button>
-            <a href="{{ route('expense.index') }}" class="btn btn-outline-secondary w-100">
-                ری سیٹ
-            </a>
+        </div>
+
+        <div class="col-md-1">
+            <a href="/expense" class="btn btn-outline-secondary w-100">ری سیٹ</a>
         </div>
 
     </form>

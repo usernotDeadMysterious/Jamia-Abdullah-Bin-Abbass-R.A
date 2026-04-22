@@ -21,7 +21,23 @@
 
     <!-- 🔥 FILTER FORM -->
     <div class="card p-3 mb-4">
-        <h2 class="text-start    font-bold text-xl p-2 mb-4 ">تفصیل آمد</h2>
+
+        {{-- Reports buttons --}}
+        <div class="w-full flex flex-row  justify-between gap-2 ml-5 mb-2">
+            <h2 class="text-start    font-bold text-xl p-2 mb-4 ">تفصیل آمد</h2>
+            <div>
+                <a href="{{ url('/reports/income/pdf-browser') . '?' . http_build_query(request()->all()) }}"
+                    target="_blank" class="btn btn-success ">
+                    رپورٹ دیکھیں
+                </a>
+
+                <a href="{{ url('/reports/income/pdf-browser') . '?' . http_build_query(array_merge(request()->all(), ['download' => 1])) }}"
+                    target="_blank" class="btn btn-dark ">
+                    ڈاؤن لوڈ رپورٹ
+                </a>
+            </div>
+
+        </div>
         <form method="GET" action="{{ url('/entry') }}" class="row g-2 align-items-end">
 
             <div class="col-md-2">
@@ -33,36 +49,60 @@
             {{-- 🔍 Search --}}
             <div class="col-md-3">
                 <input type="text" name="search" value="{{ request('search') }}" class="form-control shadow-sm"
-                    placeholder="نام / رسید / قسم تلاش کریں">
+                    placeholder="نام / رسید / قسم">
             </div>
 
             {{-- 📅 Month --}}
-            <div class="col-md-2">
+            {{-- <div class="col-md-2">
                 <select name="month" class="form-control shadow-sm">
                     <option value="">مہینہ</option>
                     @foreach($months as $num => $name)
-                        <option value="{{ $num }}" {{ ($month == $num) ? 'selected' : '' }}>
-                            {{ $name }}
-                        </option>
+                    <option value="{{ $num }}" {{ ($month==$num) ? 'selected' : '' }}>
+                        {{ $name }}
+                    </option>
                     @endforeach
                 </select>
-            </div>
+            </div> --}}
 
             {{-- 📅 Year --}}
-            <div class="col-md-2">
+            {{-- <div class="col-md-1">
                 <input type="number" name="year" value="{{ $year ?? '' }}" class="form-control shadow-sm"
                     placeholder="سال">
+            </div> --}}
+
+            {{-- 📅 FROM --}}
+            <div class="col-md-2">
+                <input type="date" name="from" value="{{ request('from') }}" class="form-control shadow-sm">
+            </div>
+
+            {{-- 📅 TO --}}
+            <div class="col-md-2">
+                <input type="date" name="to" value="{{ request('to') }}" class="form-control shadow-sm">
             </div>
 
             {{-- 🔘 Buttons --}}
-            <div class="col-md-3 d-flex gap-2">
+            <div class="col-md-2 d-flex gap-2">
                 <button class="btn btn-primary w-100 shadow-sm">فلٹر</button>
-                <a href="/entry" class="btn btn-outline-secondary w-100">ری سیٹ</a>
             </div>
 
+            <div class="col-md-1 d-flex gap-2 mt-2">
+                <a href="/entry" class="btn btn-outline-secondary w-100 ">ری سیٹ</a>
+            </div>
+
+
+
         </form>
+
     </div>
 
+    @if($from || $to)
+        <h5 class="text-center mb-3">
+            مدت:
+            {{ $from ?? 'شروع' }}
+            سے
+            {{ $to ?? 'آج تک' }}
+        </h5>
+    @endif
     <!-- 🔥 SELECTED MONTH -->
     @if($month && $year && isset($months[(int) $month]))
         <h5 class="text-center mb-3">
