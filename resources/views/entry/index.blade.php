@@ -42,7 +42,7 @@
 
             <div class="col-md-2">
                 <a href="/entry/create" class="btn btn-success w-100 shadow-sm">
-                    + نئے موصول
+                    + نیا وصول
                 </a>
             </div>
 
@@ -74,14 +74,15 @@
             <div class="col-md-2">
                 <input type="date" name="from" value="{{ request('from') }}" class="form-control shadow-sm">
             </div>
+            سے
 
             {{-- 📅 TO --}}
             <div class="col-md-2">
                 <input type="date" name="to" value="{{ request('to') }}" class="form-control shadow-sm">
             </div>
-
+            تک
             {{-- 🔘 Buttons --}}
-            <div class="col-md-2 d-flex gap-2">
+            <div class="col-md-1 d-flex gap-2">
                 <button class="btn btn-primary w-100 shadow-sm">فلٹر</button>
             </div>
 

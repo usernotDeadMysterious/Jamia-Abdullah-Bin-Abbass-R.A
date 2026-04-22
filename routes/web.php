@@ -67,25 +67,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/reports/expense/pdf-browser', [ExpenseController::class, 'reportPdfBrowser']);
 
+    Route::get('/salary-report', [ExpenseController::class, 'salaries'])
+        ->name('salary.report');
 
-    // Route::get('/test-pdf', function () {
-
-
-    //     $pdf = Pdf::loadView('test-pdf')
-    //         ->setPaper('A4')
-    //         ->setOptions([
-    //             'defaultFont' => 'urdu',
-    //             'isHtml5ParserEnabled' => true,
-    //             'isRemoteEnabled' => true,
-    //             'chroot' => base_path(),
-    //         ]);
-
-    //     return $pdf->stream('test.pdf');
-    // });
+    Route::get('/reports/salary/pdf-browser', [ExpenseController::class, 'salaryPdfBrowser']);
 
 
-
-
+    // test pdf
     Route::get('/test-pdf', function () {
 
         $arabic = new Arabic();

@@ -68,8 +68,8 @@
                     <tr>
                         <th>#</th>
                         <th>تاریخ</th>
-                        <th>عنوان</th>
-                        <th>کس کو دیا</th>
+                        {{-- <th>عنوان</th> --}}
+                        <th>نام</th>
                         <th>کیٹیگری</th>
                         <th>رقم</th>
                         <th>تفصیل</th>
@@ -81,7 +81,7 @@
                         <tr>
                             <td>{{ $expenses->firstItem() + $loop->index }}</td>
                             <td>{{ $expense->date }}</td>
-                            <td>{{ $expense->title }}</td>
+                            {{-- <td>{{ $expense->title }}</td> --}}
                             <td>{{ $expense->given_to }}</td>
                             <td>
                                 <span class="badge bg-info text-dark">

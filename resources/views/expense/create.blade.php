@@ -24,15 +24,14 @@
                 </div>
 
                 {{-- 🏷️ Title --}}
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label class="form-label">عنوان</label>
-                    <input type="text" name="title" class="form-control form-control-sm" placeholder="مثلاً: بجلی بل"
-                        required>
-                </div>
+                    <input type="text" name="title" class="form-control form-control-sm" placeholder="">
+                </div> --}}
 
                 {{-- 👤 Given To --}}
                 <div class="mb-3">
-                    <label class="form-label">کس کو دیا</label>
+                    <label class="form-label">نام</label>
                     <input type="text" name="given_to" class="form-control form-control-sm" required>
                 </div>
 

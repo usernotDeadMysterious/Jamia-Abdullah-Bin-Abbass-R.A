@@ -174,10 +174,10 @@
 
             <a href="{{ url('/entry') }}"> تفصیل آمد</a>
             <a href="{{ url('/expense') }}"> تفصیل اخراجات</a>
-
+            <a href="{{ route('salary.report') }}"> تنخواہ رپورٹ</a>
             <a href="{{ route('students.index') }}"> طلباء کی فہرست</a>
             <a href="{{ route('teachers.index') }}"> اساتذہ کی فہرست</a>
-            <span class="text-sm mt-3"> رپورٹس</span>
+            {{-- <span class="text-sm mt-3"> رپورٹس</span>
 
             <a href="{{ route('reports.income') }}"
                 class="{{ request()->routeIs('reports.income') ? 'bg-slate-700 text-white' : '' }}">
@@ -187,7 +187,7 @@
             <a href="{{ route('reports.expense') }}"
                 class="{{ request()->routeIs('reports.expense') ? 'bg-slate-700 text-white' : '' }}">
                 خرچ رپورٹ
-            </a>
+            </a> --}}
 
         </div>
         <!-- 🔽 FIXED FOOTER -->
@@ -212,7 +212,7 @@
             <!-- 🏫 Text Info -->
             <div class="text-start">
                 <h2 class="mb-1 font-bold text-2xl">جامعہ عبد اللہ بن عباسؓ</h2>
-                <p class="mb-0 text-muted">یونیورسٹی روڈ، تھکل پایان، پشاور</p>
+                <p class="mb-0 text-muted">یونیورسٹی روڈ، تھکال پایان، پشاور</p>
                 <small class="text-secondary">0321-9116027</small>
             </div>
 
