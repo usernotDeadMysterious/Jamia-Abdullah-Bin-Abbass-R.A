@@ -72,6 +72,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/reports/salary/pdf-browser', [ExpenseController::class, 'salaryPdfBrowser']);
 
+    Route::get('/students/{id}/id-card', [StudentController::class, 'idCard'])
+        ->name('students.idcard');
 
     // test pdf
     Route::get('/test-pdf', function () {
@@ -93,6 +95,9 @@ Route::middleware('auth')->group(function () {
         return $pdf->stream();
     });
 });
+
+Route::get('/verify/student/{id}', [StudentController::class, 'verify'])
+    ->name('students.verify');
 
 
 

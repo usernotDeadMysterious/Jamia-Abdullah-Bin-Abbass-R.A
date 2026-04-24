@@ -169,6 +169,37 @@
             border-radius: 12px;
         }
     </style>
+    <style>
+        .topbar {
+            background: rgb(255, 255, 255);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link-custom {
+            text-decoration: none;
+            color: #475569;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .nav-link-custom:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -235,58 +266,84 @@
 
     <!-- 🔥 MAIN CONTENT -->
     <div id="content" class="content p-4 mt-1">
-        <!-- Header -->
-        <div class="mb-2 p-4 bg-white shadow-sm rounded-3 d-flex align-items-center justify-around ">
+        <!-- 🔥 MODERN TOP BAR -->
+        <div class="topbar shadow-sm rounded-3 p-3 mb-3">
 
-            <!-- 🏫 Text Info -->
-            <div class="text-start">
-                <h2 class="mb-1 font-bold text-2xl">جامعہ عبد اللہ بن عباسؓ</h2>
-                <p class="mb-0 text-muted">یونیورسٹی روڈ، تھکال پایان، پشاور</p>
-                <small class="text-secondary">0321-9116027</small>
-            </div>
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
 
-            <!-- 🖼️ Logo (right side in RTL) -->
-            <div>
-                <img src="/logo.png" alt="Jamia Logo"
-                    style="width:90px; height:90px; object-fit:cover; border-radius:50%; border:2px ;">
-            </div>
+                <!-- 🏫 RIGHT (RTL): Logo + Title -->
+                <div class="d-flex align-items-center gap-3">
+                    <img src="/logo.png" style="width:60px;height:60px;border-radius:50%;object-fit:cover">
 
+                    <div>
+                        <h5 class="mb-0 fw-bold">جامعہ عبد اللہ بن عباسؓ</h5>
+                        <small class="text-muted">پشاور</small>
+                    </div>
+                </div>
 
-        </div>
-        {{-- 🔝 TOP NAVBAR --}}
-        <div class="bg-white shadow-sm rounded-2xl px-4 py-3 mb-1 flex items-center justify-around">
+                <!-- ⚡ CENTER: NAV LINKS -->
+                <div class="d-none d-md-flex align-items-center gap-3 text-sm">
 
+                    <a href="/dashboard" class="nav-link-custom">ڈیش بورڈ</a>
+                    <a href="/entry" class="nav-link-custom">آمدن</a>
+                    <a href="/expense" class="nav-link-custom">اخراجات</a>
+                    <a href="/salary-report" class="nav-link-custom">تنخواہ</a>
 
+                    <!-- 📊 RECORD DROPDOWN -->
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
+                            ریکارڈز
+                        </button>
 
-            {{-- ⚡ CENTER: QUICK LINKS --}}
-            <div class="hidden md:flex items-center gap-4 text-sm font-medium text-gray-600">
+                        <ul class="dropdown-menu text-end">
+                            <li><a class="dropdown-item" href="/entry">آمدن ریکارڈ</a></li>
+                            <li><a class="dropdown-item" href="/expense">خرچ ریکارڈ</a></li>
+                            <li><a class="dropdown-item" href="/salary-report">تنخواہ رپورٹ</a></li>
 
-                <a href="/dashboard" class="hover:text-blue-600">ڈیش بورڈ</a>
-                <a href="/entry" class="hover:text-green-600">آمدن</a>
-                <a href="/expense" class="hover:text-red-600">اخراجات</a>
-                <a href="/salary-report" class="hover:text-yellow-600">تنخواہ</a>
+                            <li>
+                                <hr>
+                            </li>
 
-            </div>
+                            <!-- 🔥 NEW -->
+                            <li><a class="dropdown-item" href="{{ route('students.index') }}">طلباء ریکارڈ</a></li>
+                            <li><a class="dropdown-item" href="{{ route('teachers.index') }}">اساتذہ ریکارڈ</a></li>
+                        </ul>
+                    </div>
+                </div>
 
-            {{-- ➕ RIGHT: ACTIONS --}}
-            <div class="flex items-center gap-2">
+                <!-- ➕ LEFT SIDE ACTIONS (RTL visually left) -->
+                <div class="d-flex align-items-center gap-2 flex-wrap">
 
-                <a href="/entry/create" class="px-3 py-2 bg-green-600 text-white rounded-xl text-xs">
-                    + آمدن
-                </a>
+                    <!-- Existing -->
+                    <a href="/entry/create" class="btn btn-success btn-sm">+ آمدن</a>
+                    <a href="/expense/create" class="btn btn-danger btn-sm">+ خرچ</a>
 
-                <a href="/expense/create" class="px-3 py-2 bg-red-600 text-white rounded-xl text-xs">
-                    + خرچ
-                </a>
+                    <!-- 🔥 NEW -->
+                    <a href="{{ route('students.create') }}" class="btn btn-primary btn-sm">
+                        + طالب علم
+                    </a>
 
-                {{-- 👤 USER --}}
-                <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs">
-                    {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
+                    <a href="{{ route('teachers.create') }}" class="btn btn-warning btn-sm">
+                        + استاد
+                    </a>
+
+                    <!-- 👤 USER -->
+                    <div class="user-avatar">
+                        {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
+
+
+
+
+
+
+
         @isset($header)
             <div class="mb-4">
                 {{ $header }}
@@ -368,7 +425,8 @@
             document.getElementById('content').classList.toggle('full');
         }
     </script>
-
+    <!-- ✅ Bootstrap JS (REQUIRED for dropdowns) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

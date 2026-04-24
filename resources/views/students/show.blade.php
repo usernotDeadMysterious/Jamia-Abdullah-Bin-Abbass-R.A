@@ -24,6 +24,11 @@
                     <button class="bg-red-600 text-white px-4 py-2 rounded text-sm">
                         حذف کریں
                     </button>
+
+                    <a href="{{ route('students.idcard', $student->id) }}" target="_blank"
+                        class="bg-indigo-600 text-white px-4 py-2 rounded text-sm">
+                        شناختی کارڈ دیکھیں
+                    </a>
                 </form>
             </div>
         </div>

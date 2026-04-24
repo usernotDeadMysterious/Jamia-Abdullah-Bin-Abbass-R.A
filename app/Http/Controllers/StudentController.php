@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Browsershot\Browsershot;
 class StudentController extends Controller
 {
     /**
@@ -196,5 +197,38 @@ class StudentController extends Controller
 
         return redirect()->route('students.index')
             ->with('success', 'طالب علم کامیابی سے حذف کر دیا گیا');
+    }
+
+
+
+    public function idCard($id)
+    {
+        $student = Student::with('documents')->findOrFail($id);
+
+        $html = view('students.id-card', compact('student'))->render();
+
+        return response(
+            Browsershot::html($html)
+                ->windowSize(600, 350) // ID card size
+                ->showBackground()
+                ->pdf()
+        )->header('Content-Type', 'application/pdf');
+    }
+
+    public function verify($id)
+    {
+        try {
+            $id = decrypt($id);
+        } catch (\Exception $e) {
+            return "Invalid QR Code";
+        }
+
+        $student = \App\Models\Student::find($id);
+
+        if (!$student) {
+            return "Student not found";
+        }
+
+        return view('students.verify', compact('student'));
     }
 }
